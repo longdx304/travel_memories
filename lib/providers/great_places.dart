@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../helpers/db_helpers.dart';
+import '../helpers/db_helper.dart';
 
 import '../models/place.dart';
 
