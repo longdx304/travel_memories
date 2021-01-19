@@ -54,6 +54,8 @@ class _PlacesListScreenState extends State<PlacesListScreen> {
                                     FileImage(placesData.items[index].image),
                               ),
                               title: Text(placesData.items[index].title),
+                              subtitle: Text(
+                                  placesData.items[index].location.address),
                             ),
                           ),
                 child: Center(

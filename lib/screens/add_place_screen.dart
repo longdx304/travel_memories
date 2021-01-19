@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:travel_memories/models/place.dart';
 
 import '../providers/great_places.dart';
 
@@ -18,16 +19,27 @@ class AddPlaceScreen extends StatefulWidget {
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File _pickedImage;
+  PlaceLocation _selectedLoc;
+
+  void _selectLocation({double longitude, double latitude}) {
+    _selectedLoc = PlaceLocation(
+      latitude: latitude,
+      longitude: longitude,
+    );
+  }
 
   void _selectImage(File pickedImage) {
     _pickedImage = pickedImage;
   }
 
   void _savePlace() {
-    if (_titleController.text.isEmpty || _pickedImage == null) return;
+    if (_titleController.text.isEmpty ||
+        _pickedImage == null ||
+        _selectedLoc == null) return;
     Provider.of<GreatPlaces>(context, listen: false).addPlace(
       title: _titleController.text,
       image: _pickedImage,
+      location: _selectedLoc,
     );
     Navigator.of(context).pop();
   }
@@ -42,23 +54,27 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _titleController,
-                    decoration: InputDecoration(labelText: 'Title'),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ImageInput(_selectImage),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  LocationInput(),
-                ],
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: _titleController,
+                      decoration: InputDecoration(labelText: 'Title'),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ImageInput(_selectImage),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    LocationInput(
+                      onSelectLoc: _selectLocation,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
