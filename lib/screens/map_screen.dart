@@ -7,17 +7,33 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  LatLng _pickedLocation;
+  void _selectLocation(LatLng position) {
+    setState(() {
+      _pickedLocation = position;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your place'),
+        title: Text('Your Map'),
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: LatLng(37.42796133580664, -122.085749655962),
+          target: LatLng(37.422, -122.084),
           zoom: 16,
         ),
+        onTap: _selectLocation,
+        markers: _pickedLocation == null
+            ? null
+            : {
+                Marker(
+                  markerId: MarkerId('m1'),
+                  position: _pickedLocation,
+                )
+              },
       ),
     );
   }

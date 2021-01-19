@@ -13,7 +13,7 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl;
 
-  _selectLocation() {
+  _selectOnMap() {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MapScreen(),
@@ -84,7 +84,7 @@ class _LocationInputState extends State<LocationInput> {
               label: Text('Current Location'),
             ),
             TextButton.icon(
-              onPressed: _selectLocation,
+              onPressed: _selectOnMap,
               icon: Icon(Icons.map),
               label: Text('Select on Map'),
             ),
