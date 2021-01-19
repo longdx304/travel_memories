@@ -19,6 +19,12 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Map'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: () => Navigator.of(context).pop(_pickedLocation),
+          ),
+        ],
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import '../screens/map_screen.dart';
@@ -13,22 +14,32 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl;
 
-  _selectOnMap() {
-    Navigator.of(context).push(
+  void _showPreview({longitude, latitude}) {
+    final staticMapImageUrl = LocationHelpers.generateLocationPreviewImage(
+      longitude: longitude,
+      latitude: latitude,
+    );
+    setState(() => _previewImageUrl = staticMapImageUrl);
+  }
+
+  Future<void> _selectOnMap() async {
+    final LatLng selectedLocation = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MapScreen(),
         fullscreenDialog: true,
       ),
     );
+    _showPreview(
+      latitude: selectedLocation.latitude,
+      longitude: selectedLocation.longitude,
+    );
   }
 
   Future<void> _getUserLocation() async {
     Location location = new Location();
-
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
     LocationData _locData;
-
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
@@ -36,7 +47,6 @@ class _LocationInputState extends State<LocationInput> {
         return;
       }
     }
-
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
@@ -44,13 +54,11 @@ class _LocationInputState extends State<LocationInput> {
         return;
       }
     }
-
     _locData = await location.getLocation();
-    final staticMapImageUrl = LocationHelpers.generateLocationPreviewImage(
-      longitude: _locData.longitude,
+    _showPreview(
       latitude: _locData.latitude,
+      longitude: _locData.longitude,
     );
-    setState(() => _previewImageUrl = staticMapImageUrl);
   }
 
   @override
