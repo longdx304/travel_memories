@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
+  final LatLng initialPosition;
+  final bool isSelecting;
+
+  MapScreen({
+    this.initialPosition = const LatLng(37.422, -122.084),
+    this.isSelecting = true,
+  });
+
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -22,22 +30,24 @@ class _MapScreenState extends State<MapScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.check),
-            onPressed: () => Navigator.of(context).pop(_pickedLocation),
+            onPressed: widget.isSelecting
+                ? () => Navigator.of(context).pop(_pickedLocation)
+                : null,
           ),
         ],
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
-          target: LatLng(37.422, -122.084),
+          target: widget.initialPosition,
           zoom: 16,
         ),
-        onTap: _selectLocation,
-        markers: _pickedLocation == null
+        onTap: widget.isSelecting ? _selectLocation : null,
+        markers: _pickedLocation == null && widget.isSelecting
             ? null
             : {
                 Marker(
                   markerId: MarkerId('m1'),
-                  position: _pickedLocation,
+                  position: _pickedLocation ?? widget.initialPosition,
                 )
               },
       ),
