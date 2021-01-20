@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/great_places.dart';
 
 import '../screens/add_place_screen.dart';
+import '../screens/place_detail_screen.dart';
 
 class PlacesListScreen extends StatefulWidget {
   @override
@@ -56,6 +57,10 @@ class _PlacesListScreenState extends State<PlacesListScreen> {
                               title: Text(placesData.items[index].title),
                               subtitle: Text(
                                   placesData.items[index].location.address),
+                              onTap: () => Navigator.of(context).pushNamed(
+                                PlaceDetail.routeName,
+                                arguments: placesData.items[index].id,
+                              ),
                             ),
                           ),
                 child: Center(
